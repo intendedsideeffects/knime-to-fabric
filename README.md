@@ -4,6 +4,8 @@ This project explores how the same data transformation logic can be implemented 
 
 The starting point was a simple KNIME workflow. Rather than looking for equivalent buttons or nodes, I focused on the underlying data operations and translated them into three different approaches.
 
+![Original KNIME workflow](images/knime-workflow.png)
+
 ## The Workflow
 
 The example uses synthetic transactional sales data.
