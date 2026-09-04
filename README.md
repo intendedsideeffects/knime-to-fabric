@@ -31,6 +31,10 @@ The same transformation logic is implemented using:
 - **SQL**
 - **Python / pandas**
 
+In Dataflow Gen2, the transformation is represented as a sequence of Power Query steps:
+
+![Dataflow Gen2 workflow](images/dataflow-gen2.png)
+
 Although the syntax and interfaces are different, the underlying operations map quite closely:
 
 | KNIME | Dataflow Gen2 | SQL | Python |
