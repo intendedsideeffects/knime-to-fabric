@@ -1,0 +1,51 @@
+import pandas as pd
+
+sales = spark.sql("""
+    SELECT *
+    FROM dbo.RWFD_sales_2008_2011
+""").toPandas()
+
+customer_summary = (
+    sales
+    .groupby(["CustomerID", "Country"], as_index=False)
+    .agg(
+        TotalRevenue=("Revenue", "sum"),
+        FirstPurchase=("ContractDate", "min")
+    )
+)
+
+germany = customer_summary[
+    (customer_summary["TotalRevenue"] > 30000) &
+    (customer_summary["Country"] == "DE")
+]
+
+austria = customer_summary[
+    (customer_summary["TotalRevenue"] < 10000) &
+    (customer_summary["Country"] == "AT")
+]
+
+switzerland = customer_summary[
+    (customer_summary["TotalRevenue"].between(10000, 20000)) &
+    (customer_summary["Country"] == "CH")
+]
+
+filtered_customers = pd.concat(
+    [germany, austria, switzerland],
+    ignore_index=True
+)
+
+result = sales.merge(
+    filtered_customers[
+        ["CustomerID", "TotalRevenue", "FirstPurchase"]
+    ],
+    on="CustomerID",
+    how="inner"
+)
+
+result = (
+    result
+    .sort_values(["CustomerID", "ContractDate"])
+    .reset_index(drop=True)
+)
+
+display(result)
