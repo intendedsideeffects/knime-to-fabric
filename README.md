@@ -1,36 +1,60 @@
-# KNIME to Fabric
+# One Workflow, Three Ways
 
-A small comparison of how the same data transformation logic can be implemented using different tools in Microsoft Fabric.
+This project explores how the same data transformation logic can be implemented in Microsoft Fabric using **Dataflow Gen2, SQL and Python**.
 
-The starting point was a simple KNIME workflow that aggregates transactional sales data, filters customer groups based on revenue and country, and joins the selected customers back to the original transaction data.
+The starting point was a simple KNIME workflow. Rather than looking for equivalent buttons or nodes, I focused on the underlying data operations and translated them into three different approaches.
 
-I recreated this logic using three different approaches:
+## The Workflow
 
-- **Dataflow Gen2** – using Power Query transformations
-- **SQL** – using aggregations, filters and joins
-- **Python** – using pandas
+The example uses synthetic transactional sales data.
 
-The goal was not to find the "best" tool, but to understand how the same data operations translate between visual workflows, SQL and Python.
+The transformation:
 
-## Transformation Logic
+1. Aggregates transactions by customer and country
+2. Calculates total revenue and the first purchase date
+3. Applies three different customer filters based on country and revenue
+4. Combines the filtered customer groups
+5. Joins the selected customers back to the original transaction data
+6. Sorts the final result
 
-The workflow follows the same general structure:
+In simplified form:
 
-**Load → Aggregate → Filter → Combine → Join**
+**Load → Aggregate → Filter → Combine → Join → Sort**
+
+## Three Implementations
+
+The same transformation logic is implemented using:
+
+- **Dataflow Gen2 / Power Query (M)**
+- **SQL**
+- **Python / pandas**
+
+Although the syntax and interfaces are different, the underlying operations map quite closely:
 
 | KNIME | Dataflow Gen2 | SQL | Python |
 |---|---|---|---|
-| GroupBy | Group By | `GROUP BY` | `.groupby()` |
-| Row Filter | Filter Rows | `WHERE` | Boolean filtering |
-| Concatenate | Append / combined filter logic | `UNION ALL` | `pd.concat()` |
-| Joiner | Merge Queries | `INNER JOIN` | `.merge()` |
+| GroupBy | `Table.Group` | `GROUP BY` | `.groupby()` |
+| Row Filter | `Table.SelectRows` | `WHERE` | Boolean filtering |
+| Concatenate | `Table.Combine` | `UNION ALL` | `pd.concat()` |
+| Joiner | `Table.NestedJoin` | `INNER JOIN` | `.merge()` |
+| Sorter | `Table.Sort` | `ORDER BY` | `.sort_values()` |
 
 ## Repository
 
+- `workflow.m` – Dataflow Gen2 / Power Query implementation
 - `workflow.sql` – SQL implementation
 - `workflow.py` – Python implementation
-- `README.md` – project overview
+
+## Takeaway
+
+For this workflow, there is no meaningful winner.
+
+The example is small enough that all three approaches work perfectly well. What changes is how the transformation logic is expressed: visually through Power Query steps, declaratively in SQL, or programmatically in Python.
+
+The useful part of the exercise was seeing that the tools may look very different, while the underlying data logic remains largely the same.
+
+> The syntax changes. The data logic doesn't.
 
 ## Note
 
-The data used in this project is synthetic and does not represent real customer or company data.
+All data used in this project is synthetic and does not represent real customer or company data.
