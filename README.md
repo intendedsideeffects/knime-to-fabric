@@ -2,7 +2,7 @@
 
 This project explores how the same data transformation logic can be implemented in Microsoft Fabric using **Dataflow Gen2, SQL and Python**.
 
-The starting point was a simple KNIME workflow. Rather than looking for equivalent buttons or nodes, I focused on the underlying data operations and translated them into three different approaches.
+The starting point was a simple **KNIME** workflow. Rather than looking for equivalent buttons or nodes, I focused on the underlying data operations and translated them into three different approaches.
 
 ![Original KNIME workflow](images/knime-workflow.png)
 
